@@ -101,6 +101,7 @@
             triviaQuestion={question}
             on:edit={() => (editingQuestion = question)}
             on:delete={() => (deletingQuestion = question)}
+            on:right-wrong-update={() => reread()}
           />
         {/each}
 
