@@ -3,8 +3,7 @@
   import QuestionForm from "$components/question-form.svelte";
   import Question, { type TriviaQuestion } from "$components/question.svelte";
   import { read } from "$lib/index";
-  import Icon from "@iconify/svelte";
-  import { onDestroy, onMount } from "svelte";
+  import { onMount } from "svelte";
 
   let trivia_day: string = "";
   let questions: TriviaQuestion[] = [];
@@ -17,47 +16,18 @@
   let nextRound = 1;
   let nextQuestion = 1;
 
-  let eventSource: EventSource;
-  let connectedEventSource = false;
-
-  function establishEventSource() {
-    eventSource = new EventSource("/data/listen", { withCredentials: true });
-
-    eventSource.onmessage = (e) => {
-      connectedEventSource = true;
-      if (trivia_day && e.data.includes(trivia_day)) {
-        read(trivia_day).then((q) => (questions = q));
-      }
-      if (e.data.includes("Server Termination")) {
-        console.log("restarting SSE in 15 seconds");
-        connectedEventSource = false;
-        setTimeout(establishEventSource, 15000);
-      }
-    };
-
-    eventSource.onerror = (e) => {
-      connectedEventSource = false;
-      establishEventSource();
-    };
-
-    connectedEventSource = eventSource.readyState != 2;
+  function reread() {
+    return read(trivia_day)
+      .then((q) => (questions = q))
+      .catch((e) => (error = e))
+      .then(() => (loading = false));
   }
 
   onMount(async () => {
     const urlParams = new URLSearchParams(window.location.search);
     trivia_day = urlParams.get("trivia_day")!;
     loading = true;
-    read(trivia_day)
-      .then((q) => (questions = q))
-      .catch((e) => (error = e))
-      .then(() => (loading = false));
-
-    establishEventSource();
-  });
-
-  onDestroy(() => {
-    console.log("closing eventSource");
-    if (eventSource) eventSource.close();
+    reread();
   });
 
   $: {
@@ -145,7 +115,7 @@
               question: "",
               answer: "",
             }}
-            on:upsert-complete={() => (adding = false)}
+            on:upsert-complete={() => reread().then(() => (adding = false))}
           />
         {:else}
           <button
@@ -160,7 +130,8 @@
             on:close={() => (editingQuestion = null)}
             on:cancelled={() => (editingQuestion = null)}
             triviaQuestion={editingQuestion}
-            on:upsert-complete={() => (editingQuestion = null)}
+            on:upsert-complete={() =>
+              reread().then(() => (editingQuestion = null))}
           />
         {/if}
 
@@ -169,7 +140,8 @@
             on:close={() => (deletingQuestion = null)}
             on:cancelled={() => (deletingQuestion = null)}
             triviaQuestion={deletingQuestion}
-            on:delete-complete={() => (deletingQuestion = null)}
+            on:delete-complete={() =>
+              reread().then(() => (deletingQuestion = null))}
           />
         {/if}
       </div>
@@ -177,13 +149,6 @@
     {#if error}
       <div>{error}</div>
       <a href={"/"} class="underline">Back</a>
-    {/if}
-  </div>
-  <div class="fixed bottom-1 right-1">
-    {#if connectedEventSource}
-      <Icon icon="lets-icons:check-fill" class="text-sx" color="green" />
-    {:else}
-      <Icon icon="bxs:x-circle" class="text-sx " color="crimson" />
     {/if}
   </div>
 </div>
