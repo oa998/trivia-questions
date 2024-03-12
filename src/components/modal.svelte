@@ -2,9 +2,14 @@
   import { onMount } from "svelte";
 
   let dialogRef: HTMLDialogElement;
+  export const open = () => dialogRef.showModal();
+  export const close = () => dialogRef.close();
+  export let wide = false;
+  export let closeDisabled = false;
 
   onMount(() => {
     dialogRef.addEventListener("click", (e) => {
+      if (closeDisabled) return;
       const dialogDimensions = dialogRef.getBoundingClientRect();
       if (
         e.clientX < dialogDimensions.left ||
@@ -20,8 +25,7 @@
 </script>
 
 <dialog bind:this={dialogRef} on:close>
-  <div class="p-5">
-    ok
+  <div class:w-[85vw]={wide} class="p-5">
     <slot />
   </div>
 </dialog>
@@ -29,9 +33,8 @@
 <style lang="postcss">
   dialog {
     z-index: 10;
-    background: green;
+    background: white;
     border: none;
-    border-radius: 1rem;
   }
   dialog::backdrop {
     @apply bg-gray-400 bg-opacity-50;

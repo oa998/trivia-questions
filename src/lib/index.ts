@@ -1,10 +1,10 @@
 // place files you want to import through the `$lib` alias in this folder.
 
-import { isLoggedIn } from "$stores/auth";
+import type { TriviaQuestion } from "$components/question.svelte";
 import { peekFor401, throwIfNot2xx } from "./fetch-utils";
 
 export const login = async (password: string) => {
-  return fetch("/data/am-i-available/login-pw", {
+  return fetch("/data/login-pw", {
     method: "POST",
     headers: {
       "content-type": "application/json",
@@ -13,82 +13,81 @@ export const login = async (password: string) => {
     body: JSON.stringify({ password }),
   })
     .then(peekFor401)
+    .then(throwIfNot2xx);
+};
+
+export const getAllDays = async () => {
+  return fetch("/data/read-day-list", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    credentials: "include",
+  })
+    .then(peekFor401)
     .then(throwIfNot2xx)
-    .then(() => {
-      isLoggedIn.set(true);
+    .then((r) => r.json())
+    .then((j) =>
+      j.map((row) => ({
+        ...row,
+        created_on: new Date(row.created_on),
+      }))
+    );
+};
+
+export const read = async (triviaDay: string) => {
+  return fetch("/data/read", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ triviaDay }),
+  })
+    .then(peekFor401)
+    .then(throwIfNot2xx)
+    .then((r) => r.json())
+    .then((j) => {
+      if (j?.length) {
+        return j;
+      } else {
+        throw new Error(`No questions exist for ${triviaDay}, yet`);
+      }
     });
 };
 
-export const getAvailabilities = async () => {
-  return fetch("/data/am-i-available/get-availabilities")
+export const upsert = async (triviaQuestion: TriviaQuestion) => {
+  return fetch("/data/upsert", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      ...triviaQuestion,
+      triviaDay: triviaQuestion.trivia_day,
+      roundNumber: triviaQuestion.round_number,
+      questionNumber: triviaQuestion.question_number,
+    }),
+  })
     .then(peekFor401)
     .then(throwIfNot2xx);
 };
 
-export const setAvailability = async (
-  name: string,
-  date: string,
-  isAvailable: 0 | 1
+export const deleteQuestion = async (
+  triviaQuestion: Omit<TriviaQuestion, "question" | "answer">
 ) => {
-  return fetch("/data/am-i-available/set-availability", {
+  return fetch("/data/delete", {
     method: "POST",
     headers: {
       "content-type": "application/json",
     },
     credentials: "include",
-    body: JSON.stringify({ name, date, isAvailable }),
-  })
-    .then(peekFor401)
-    .then(throwIfNot2xx);
-};
-
-export const addAttendee = async (name: string) => {
-  return fetch("/data/am-i-available/add-attendee", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    credentials: "include",
-    body: JSON.stringify({ name }),
-  })
-    .then(peekFor401)
-    .then(throwIfNot2xx);
-};
-
-export const removeAttendee = async (name: string) => {
-  return fetch("/data/am-i-available/remove-attendee", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    credentials: "include",
-    body: JSON.stringify({ name }),
-  })
-    .then(peekFor401)
-    .then(throwIfNot2xx);
-};
-
-export const addDate = async (date: string) => {
-  return fetch("/data/am-i-available/add-date", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    credentials: "include",
-    body: JSON.stringify({ date }),
-  })
-    .then(peekFor401)
-    .then(throwIfNot2xx);
-};
-
-export const removeDate = async (date: string) => {
-  return fetch("/data/am-i-available/remove-date", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    credentials: "include",
-    body: JSON.stringify({ date }),
+    body: JSON.stringify({
+      triviaDay: triviaQuestion.trivia_day,
+      roundNumber: triviaQuestion.round_number,
+      questionNumber: triviaQuestion.question_number,
+    }),
   })
     .then(peekFor401)
     .then(throwIfNot2xx);
