@@ -75,6 +75,9 @@
                 color="crimson"
               />
             {/if}
+            {#if triviaQuestion.correct == 2}
+              <div class="w-10" />
+            {/if}
             <div>Points</div>
             <div>
               {triviaQuestion.wager == null ? "-" : triviaQuestion.wager}

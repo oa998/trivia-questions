@@ -10,6 +10,7 @@
     {#each days as day}
       <button
         on:click={() => {
+          console.log(`${base}/day?trivia_day=${day.trivia_day}`);
           goto(`${base}/day?trivia_day=${day.trivia_day}`);
         }}
         class="border border-black p-3 bg-blue-300 text-center"

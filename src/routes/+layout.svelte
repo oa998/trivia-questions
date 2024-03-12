@@ -11,5 +11,7 @@
 {#await getDays}
   <div>...loading</div>
 {:then}
-  <slot />
+  <div style="background: #0d2a47;">
+    <slot />
+  </div>
 {/await}
