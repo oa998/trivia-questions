@@ -21,7 +21,7 @@
   let connectedEventSource = false;
 
   function establishEventSource() {
-    eventSource = new EventSource("/data/listen");
+    eventSource = new EventSource("/data/listen", { withCredentials: true });
 
     eventSource.onmessage = (e) => {
       connectedEventSource = true;
