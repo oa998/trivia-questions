@@ -1,28 +1,43 @@
 <script lang="ts">
   import Modal from "$components/modal.svelte";
   import { upsert } from "$lib/index";
+  import Icon from "@iconify/svelte";
   import { createEventDispatcher } from "svelte";
   import type TriviaQuestion from "./question.svelte";
   let modal: Modal;
   export let triviaQuestion: TriviaQuestion;
-  let { trivia_day, round_number, question_number, question, answer } =
-    triviaQuestion;
+  let {
+    trivia_day,
+    round_number,
+    question_number,
+    question,
+    answer,
+    wager,
+    correct,
+  } = triviaQuestion;
   let submitting = false;
   let error = "";
   const dispatcher = createEventDispatcher();
+  let answer_correct_toggle = correct == null ? 2 : correct;
 </script>
 
-<Modal wide bind:this={modal} closeDisabled={submitting} on:close>
+<Modal class="w-[80vw]" bind:this={modal} closeDisabled={submitting} on:close>
   <form
     on:submit|preventDefault={async () => {
       submitting = true;
       modal.open();
+      let correct = answer_correct_toggle;
+      if (answer_correct_toggle == 2) {
+        correct = null;
+      }
       upsert({
         trivia_day,
         round_number,
         question_number,
         question,
         answer,
+        wager,
+        correct,
       })
         .then(() => dispatcher("upsert-complete"))
         .then(modal.close)
@@ -31,28 +46,68 @@
     }}
     class="flex flex-col gap-2"
   >
-    <div class="flex flex-row justify-around gap-3">
-      <div class="flex flex-col w-2/6">
+    <div class="flex flex-row justify-center gap-10 flex-wrap">
+      <div class="flex flex-col w-[100px]">
         <input
           bind:value={round_number}
           type="number"
           disabled={submitting}
           class=" max-w-min border-b-black border-b outline-none disabled:bg-slate-300 disabled:text-gray-500"
           on:input={() => (error = "")}
+          required
         />
         <span class="text-xs">Round</span>
       </div>
 
-      <div class="flex flex-col w-2/6">
+      <div class="flex flex-col w-[100px]">
         <input
           bind:value={question_number}
           type="number"
           disabled={submitting}
           class="border-b-black border-b outline-none disabled:bg-slate-300 disabled:text-gray-500"
           on:input={() => (error = "")}
+          required
         />
         <span class="text-xs">Question</span>
       </div>
+
+      <div class="flex flex-col w-[100px]">
+        <input
+          bind:value={wager}
+          type="number"
+          disabled={submitting}
+          class="border-b-black border-b outline-none disabled:bg-slate-300 disabled:text-gray-500"
+          on:input={() => (error = "")}
+          required
+          min={0}
+          max={15}
+        />
+        <span class="text-xs">Wager/Winnings</span>
+      </div>
+
+      <button
+        type="button"
+        class:bg-red-200={answer_correct_toggle == 0}
+        class:bg-green-200={answer_correct_toggle == 1}
+        class:bg-white={answer_correct_toggle == 2}
+        class="flex flex-row w-min gap-2 items-center px-2 rounded-lg"
+        on:click={() => {
+          answer_correct_toggle += 2;
+          answer_correct_toggle %= 3;
+          console.log("final:", answer_correct_toggle);
+        }}
+      >
+        <span class="text-xs">Answered:</span>
+        {#if answer_correct_toggle == 0}
+          <Icon icon="bxs:x-circle" class="text-lg " color="crimson" />
+        {/if}
+        {#if answer_correct_toggle == 1}
+          <Icon icon="lets-icons:check-fill" class="text-lg" color="green" />
+        {/if}
+        {#if answer_correct_toggle == 2}
+          <Icon icon="ic:outline-remove-circle" class="text-lg" color="gray" />
+        {/if}
+      </button>
     </div>
 
     <div class="flex flex-col">

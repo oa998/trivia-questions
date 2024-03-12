@@ -4,8 +4,10 @@
   let dialogRef: HTMLDialogElement;
   export const open = () => dialogRef.showModal();
   export const close = () => dialogRef.close();
-  export let wide = false;
+  export let width = "w-[85vsw]";
   export let closeDisabled = false;
+  let clazz: string;
+  export { clazz as class };
 
   onMount(() => {
     dialogRef.addEventListener("click", (e) => {
@@ -24,8 +26,8 @@
   });
 </script>
 
-<dialog bind:this={dialogRef} on:close>
-  <div class:w-[85vw]={wide} class="p-5">
+<dialog class={clazz} bind:this={dialogRef} on:close>
+  <div class={`p-5`}>
     <slot />
   </div>
 </dialog>

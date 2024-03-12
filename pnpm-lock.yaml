@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  '@iconify/svelte':
+    specifier: ^3.1.6
+    version: 3.1.6(svelte@4.2.7)
   '@sveltejs/adapter-static':
     specifier: ^3.0.1
     version: 3.0.1(@sveltejs/kit@2.0.0)
@@ -314,6 +317,19 @@ packages:
   /@humanwhocodes/object-schema@2.0.2:
     resolution: {integrity: sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==}
     dev: true
+
+  /@iconify/svelte@3.1.6(svelte@4.2.7):
+    resolution: {integrity: sha512-yLSrlkOx5J6xXU5GDLPBV/MdVBVEZhd36onfqSbxQobp1XBoWQbMPLNZyCAmTKCPnmzXSowGy79agl8FQ3kj6A==}
+    peerDependencies:
+      svelte: '*'
+    dependencies:
+      '@iconify/types': 2.0.0
+      svelte: 4.2.7
+    dev: false
+
+  /@iconify/types@2.0.0:
+    resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
+    dev: false
 
   /@isaacs/cliui@8.0.2:
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}

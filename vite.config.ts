@@ -6,11 +6,11 @@ export default defineConfig({
   server: {
     proxy: {
       "/data": {
-        target: "https://nginx-trivia-server-bulntd73xq-uc.a.run.app",
-        // target: "http://localhost:3000",
-        // rewrite: (path) => {
-        //   return path.replace(/^\/data/, "");
-        // },
+        // target: "https://nginx-trivia-server-bulntd73xq-uc.a.run.app",
+        target: "http://localhost:3000",
+        rewrite: (path) => {
+          return path.replace(/^\/data/, "/trivia");
+        },
         changeOrigin: true,
       },
     },

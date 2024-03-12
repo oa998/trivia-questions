@@ -12,7 +12,7 @@
   const dispatcher = createEventDispatcher();
 </script>
 
-<Modal wide bind:this={modal} closeDisabled={submitting} on:close>
+<Modal class="w-1/2" bind:this={modal} closeDisabled={submitting} on:close>
   <form
     on:submit|preventDefault={async () => {
       submitting = true;
