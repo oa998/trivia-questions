@@ -124,6 +124,6 @@ export const beep = () => {
     oscillator.start(audioCtx.currentTime);
     oscillator.stop(audioCtx.currentTime + (duration || 500) / 1000);
   }
-  beepNoise(1000, 240, 0.3, "sine");
-  setTimeout(() => beepNoise(1000, 440, 0.1, "sine"), 100);
+  beepNoise(1000, 240, 0.7, "sine");
+  setTimeout(() => beepNoise(1000, 440, 0.5, "sine"), 100);
 };
