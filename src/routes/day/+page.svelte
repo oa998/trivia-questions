@@ -113,7 +113,6 @@
             {/if}
           </button>
         </div>
-        <button on:click={beep}>beep</button>
         <div
           class="text-xl font-bold text-center text-white bg-black fixed bottom-2 left-2 whitespace-nowrap px-2"
         >
