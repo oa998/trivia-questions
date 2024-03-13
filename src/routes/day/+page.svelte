@@ -2,7 +2,8 @@
   import DeleteQuestionForm from "$components/delete-question-form.svelte";
   import QuestionForm from "$components/question-form.svelte";
   import Question, { type TriviaQuestion } from "$components/question.svelte";
-  import { read } from "$lib/index";
+  import { beep, read } from "$lib/index";
+  import Icon from "@iconify/svelte";
   import dayjs from "dayjs";
   import { onDestroy, onMount } from "svelte";
 
@@ -18,12 +19,14 @@
   let nextQuestion = 1;
   let refreshInterval: number;
   let lastUpdate = new Date().toJSON();
+  let soundOn = false;
 
   function reread() {
     return read(trivia_day)
       .then((q) => {
         if (JSON.stringify(questions) != JSON.stringify(q)) {
           lastUpdate = new Date().toJSON();
+          if (soundOn) beep();
         } else {
           const FORTY_MINS = 1000 * 60 * 40;
           if (
@@ -89,10 +92,28 @@
     {#if questions.length}
       <div class="flex flex-col gap-3 pt-10">
         <div
-          class="text-xl font-bold text-center text-white bg-black px-10 w-min whitespace-nowrap self-center"
+          class="text-xl font-bold text-center text-white bg-black px-10 w-min whitespace-nowrap self-center flex flex-row gap-5 items-center"
         >
           {trivia_day}
+          <button
+            class:text-lime-500={soundOn}
+            class:border-lime-500={soundOn}
+            class="flex flex-row gap-2 items-center border rounded-lg border-white px-2"
+            on:click={() => {
+              soundOn = !soundOn;
+              if (soundOn) beep();
+            }}
+          >
+            {#if soundOn}
+              <Icon icon="mdi:speakerphone" color="lime" />
+              <span>On</span>
+            {:else}
+              <Icon icon="mdi:mute" color="pink" />
+              <span>Off</span>
+            {/if}
+          </button>
         </div>
+        <button on:click={beep}>beep</button>
         <div
           class="text-xl font-bold text-center text-white bg-black fixed bottom-2 left-2 whitespace-nowrap px-2"
         >

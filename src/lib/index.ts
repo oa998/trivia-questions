@@ -92,3 +92,38 @@ export const deleteQuestion = async (
     .then(peekFor401)
     .then(throwIfNot2xx);
 };
+
+export const beep = () => {
+  const audioCtx = new (window.AudioContext ||
+    window.webkitAudioContext ||
+    window.audioContext)();
+  function beepNoise(duration, frequency, volume, type, callback = null) {
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    gainNode.gain.exponentialRampToValueAtTime(
+      0.00001,
+      audioCtx.currentTime + 0.5
+    );
+
+    if (volume) {
+      gainNode.gain.value = volume;
+    }
+    if (frequency) {
+      oscillator.frequency.value = frequency;
+    }
+    if (type) {
+      oscillator.type = type;
+    }
+    if (callback) {
+      oscillator.onended = callback;
+    }
+
+    oscillator.start(audioCtx.currentTime);
+    oscillator.stop(audioCtx.currentTime + (duration || 500) / 1000);
+  }
+  beepNoise(1000, 240, 0.3, "sine");
+  setTimeout(() => beepNoise(1000, 440, 0.1, "sine"), 100);
+};
