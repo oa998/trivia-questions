@@ -10,7 +10,7 @@
 </script>
 
 <button
-  class="underline"
+  class="underline text-white"
   on:click={() => {
     value = "";
     error = "";
