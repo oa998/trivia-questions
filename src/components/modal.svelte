@@ -26,7 +26,7 @@
   });
 </script>
 
-<dialog class={clazz} bind:this={dialogRef} on:close>
+<dialog class={`mt-5 ${clazz}`} bind:this={dialogRef} on:close>
   <div class={`p-5`}>
     <slot />
   </div>
