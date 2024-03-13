@@ -1,13 +1,21 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { base } from "$app/paths";
+  import { getAllDays } from "$lib/index";
+  import AddTriviaDateForm from "./add-trivia-date-form.svelte";
 
   export let days: { created_on: Date; trivia_day: string }[] = [];
+  let dayz = days;
+  function reloadDays() {
+    return getAllDays().then((d) => (dayz = d));
+  }
+  let adding = false;
 </script>
 
 <div class="w-full h-[100vh] grid place-items-center relative p-5 svg-circ">
   <div class="flex flex-col gap-5 w-full max-w-sm">
-    {#each days as day}
+    <div class="text-white">Trivia Day:</div>
+    {#each dayz || days as day}
       <button
         on:click={() => {
           console.log(`${base}/day?trivia_day=${day.trivia_day}`);
@@ -17,6 +25,19 @@
         >{day.trivia_day}</button
       >
     {/each}
+    {#if adding}
+      <AddTriviaDateForm
+        on:cancelled={() => (adding = false)}
+        on:upsert-complete={() => {
+          reloadDays().then(() => (adding = false));
+        }}
+      />
+    {:else}
+      <button
+        class="p-2 border border-gray-200 rounded w-1/2 self-center active:bg-gray-700 text-white"
+        on:click={() => (adding = true)}>+</button
+      >
+    {/if}
   </div>
 </div>
 
