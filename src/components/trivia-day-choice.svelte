@@ -28,16 +28,16 @@
     {#if adding}
       <AddTriviaDateForm
         on:cancelled={() => (adding = false)}
+        on:close={() => (adding = false)}
         on:upsert-complete={() => {
           reloadDays().then(() => (adding = false));
         }}
       />
-    {:else}
-      <button
-        class="p-2 border border-gray-200 rounded w-1/2 self-center active:bg-gray-700 text-white"
-        on:click={() => (adding = true)}>+</button
-      >
     {/if}
+    <button
+      class="p-2 border border-gray-200 rounded w-1/2 self-center active:bg-gray-700 text-white"
+      on:click={() => (adding = true)}>+</button
+    >
   </div>
 </div>
 

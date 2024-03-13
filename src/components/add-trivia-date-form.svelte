@@ -10,9 +10,17 @@
   let error = "";
   let trivia_day = dayjs().format("dddd, MMMM D");
   const dispatcher = createEventDispatcher();
+  $: innerWidth = 0;
 </script>
 
-<Modal class="w-[40vw]" bind:this={modal} closeDisabled={submitting} on:close>
+<svelte:window bind:innerWidth />
+
+<Modal
+  class={innerWidth < 700 ? "w-[90vw]" : "w-[40vw]"}
+  bind:this={modal}
+  closeDisabled={submitting}
+  on:close
+>
   <form
     on:submit|preventDefault={async () => {
       submitting = true;
