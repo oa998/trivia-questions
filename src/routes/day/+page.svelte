@@ -3,7 +3,8 @@
   import QuestionForm from "$components/question-form.svelte";
   import Question, { type TriviaQuestion } from "$components/question.svelte";
   import { read } from "$lib/index";
-  import { onMount } from "svelte";
+  import dayjs from "dayjs";
+  import { onDestroy, onMount } from "svelte";
 
   let trivia_day: string = "";
   let questions: TriviaQuestion[] = [];
@@ -15,10 +16,24 @@
 
   let nextRound = 1;
   let nextQuestion = 1;
+  let refreshInterval: number;
+  let lastUpdate = new Date().toJSON();
 
   function reread() {
     return read(trivia_day)
-      .then((q) => (questions = q))
+      .then((q) => {
+        if (JSON.stringify(questions) != JSON.stringify(q)) {
+          lastUpdate = new Date().toJSON();
+        } else {
+          const FORTY_MINS = 1000 * 60 * 40;
+          if (
+            FORTY_MINS < Math.abs(dayjs(new Date(lastUpdate)).diff(new Date()))
+          ) {
+            clearInterval(refreshInterval);
+          }
+        }
+        questions = q;
+      })
       .catch((e) => (error = e))
       .then(() => (loading = false));
   }
@@ -28,6 +43,11 @@
     trivia_day = urlParams.get("trivia_day")!;
     loading = true;
     reread();
+    refreshInterval = setInterval(reread, 30 * 1000);
+  });
+
+  onDestroy(() => {
+    clearInterval(refreshInterval);
   });
 
   $: {
