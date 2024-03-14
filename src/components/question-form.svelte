@@ -10,6 +10,7 @@
     trivia_day,
     round_number,
     question_number,
+    category,
     question,
     answer,
     wager,
@@ -21,7 +22,12 @@
   let answer_correct_toggle = correct == null ? 2 : correct;
 </script>
 
-<Modal class="w-[80vw]" bind:this={modal} closeDisabled={submitting} on:close>
+<Modal
+  class="w-[80vw] max-w-xl"
+  bind:this={modal}
+  closeDisabled={submitting}
+  on:close
+>
   <form
     on:submit|preventDefault={async () => {
       submitting = true;
@@ -35,6 +41,7 @@
         round_number,
         question_number,
         question,
+        category,
         answer,
         wager,
         correct,
@@ -110,6 +117,17 @@
       </button>
     </div>
 
+    <div class="flex flex-col w-full pt-3">
+      <input
+        bind:value={category}
+        type="text"
+        disabled={submitting}
+        class="border-b-black border-b outline-none disabled:bg-slate-300 disabled:text-gray-500"
+        on:input={() => (error = "")}
+      />
+      <span class="text-xs">Category</span>
+    </div>
+
     <div class="flex flex-col">
       <textarea
         bind:value={question}
@@ -117,6 +135,7 @@
         cols={6}
         class="border-black border outline-none h-24 p-1 disabled:bg-slate-300 disabled:text-gray-500"
         on:input={() => (error = "")}
+        autofocus
       />
       <span class="text-xs">Question</span>
     </div>

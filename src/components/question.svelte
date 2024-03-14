@@ -3,6 +3,7 @@
     trivia_day: string;
     round_number: number;
     question_number: number;
+    category: string;
     question: string;
     answer: string;
     wager: number;
@@ -40,9 +41,10 @@
           {#if triviaQuestion.question_number > 3}
             <div />
           {:else}
-            <div class="flex flex-row gap-1 rounded p-3">
-              <div>Question #</div>
-              <div>{triviaQuestion.question_number}</div>
+            <div
+              class="flex flex-row gap-1 rounded p-3 text-xs sm:text-sm self-center"
+            >
+              <div>{triviaQuestion.category}</div>
             </div>
           {/if}
 

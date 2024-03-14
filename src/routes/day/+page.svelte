@@ -85,7 +85,7 @@
 <div
   class="w-full min-h-[100vh] grid justify-center px-5 pt-5 pb-56 svg relative"
 >
-  <div class="flex flex-col gap-5 w-full max-w-sm">
+  <div class="flex flex-col gap-5 w-full max-w-md">
     {#if loading}
       <div>...loading questions</div>
     {/if}
