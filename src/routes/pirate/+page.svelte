@@ -3,7 +3,7 @@
 
   let audioRef;
   onMount(() => {
-    audioRef.volume = 0.5;
+    audioRef.volume = 1;
   });
 </script>
 
