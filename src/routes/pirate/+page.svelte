@@ -17,7 +17,7 @@
   </audio>
   <pre class="text-center text-3xl underline pt-10">Pirates of the Deep</pre>
   <pre class="text-center text-sm">a sea shanty</pre>
-  <pre class="whitespace-pre-wrap text-lime-300 py-10">
+  <pre class="whitespace-pre-wrap text-lime-300 py-10 text-xs">
     Hoist the sails, raise the anchor, lads
     We're setting sail for distant lands
     A legend tells of a hidden chest
