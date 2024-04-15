@@ -1,6 +1,6 @@
 <script>
+  import { base } from "$app/paths";
   import { onMount } from "svelte";
-
   let audioRef;
   onMount(() => {
     audioRef.volume = 1;
@@ -10,9 +10,9 @@
 <div
   class="grid place-items-center bg-green-900 w-full min-h-[100lvh] text-lime-300"
 >
-  <img src="giphy.gif" class="my-10" />
+  <img src={`${base}/giphy.gif`} class="my-10" />
   <audio bind:this={audioRef} controls>
-    <source src="pirates_of_the_deep_full.mp3" type="audio/mpeg" />
+    <source src={`${base}/pirates_of_the_deep_full.mp3`} type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
   <pre class="text-center text-3xl underline pt-10">Pirates of the Deep</pre>

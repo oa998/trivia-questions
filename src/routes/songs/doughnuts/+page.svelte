@@ -1,4 +1,5 @@
 <script>
+  import { base } from "$app/paths";
   import { onMount } from "svelte";
 
   let audioRef;
@@ -10,9 +11,9 @@
 <div
   class="grid place-items-center bg-[#77bbfe] w-full min-h-[100lvh] text-violet-800"
 >
-  <img src="doughnut.gif" class="my-10" />
+  <img src={`${base}/doughnut.gif`} class="my-10" />
   <audio bind:this={audioRef} controls>
-    <source src="Sweet_Salvation_V2.mp3" type="audio/mpeg" />
+    <source src={`${base}/Sweet_Salvation_V2.mp3`} type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
   <pre class="text-center text-3xl underline pt-10">Sweet Salvation</pre>
