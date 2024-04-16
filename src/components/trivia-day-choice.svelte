@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
   import { base } from "$app/paths";
   import { getAllDays } from "$lib/index";
   import AddTriviaDateForm from "./add-trivia-date-form.svelte";
@@ -16,13 +15,10 @@
   <div class="flex flex-col gap-5 w-full max-w-sm">
     <div class="text-white">Trivia Day:</div>
     {#each dayz || days as day}
-      <button
-        on:click={() => {
-          console.log(`${base}/day?trivia_day=${day.trivia_day}`);
-          goto(`${base}/day?trivia_day=${day.trivia_day}`);
-        }}
+      <a
+        href={`${base}/day?trivia_day=${day.trivia_day}`}
         class="border border-black p-3 bg-blue-300 text-center"
-        >{day.trivia_day}</button
+        >{day.trivia_day}</a
       >
     {/each}
     {#if adding}

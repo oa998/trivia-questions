@@ -1,17 +1,25 @@
 <script lang="ts">
+  import { browser } from "$app/environment";
   import { goto } from "$app/navigation";
   import { getAllDays } from "$lib/index";
+  import { onMount } from "svelte";
   import "../app.css";
-  let success = false;
-  let getDays = getAllDays()
-    .then(() => (success = true))
-    .catch(() => goto("/"));
+
+  let loading = true;
+  onMount(() => {
+    if (browser && location.pathname.startsWith("/songs")) {
+      loading = false;
+    }
+    getAllDays()
+      .then(() => (loading = false))
+      .catch(() => goto("/"));
+  });
 </script>
 
-{#await getDays}
+{#if loading}
   <div>...loading</div>
-{:then}
+{:else}
   <div style="background: #0d2a47;">
     <slot />
   </div>
-{/await}
+{/if}

@@ -6,7 +6,7 @@
   export const close = () => dialogRef.close();
   export let width = "w-[85vsw]";
   export let closeDisabled = false;
-  let clazz: string;
+  let clazz: string = "";
   export { clazz as class };
 
   onMount(() => {
