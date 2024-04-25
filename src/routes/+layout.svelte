@@ -2,18 +2,14 @@
   import { browser } from "$app/environment";
   import { goto } from "$app/navigation";
   import { getAllDays } from "$lib/index";
-  import { onMount } from "svelte";
   import "../app.css";
 
   let loading = true;
-  onMount(() => {
-    if (browser && location.pathname.startsWith("/songs")) {
-      loading = false;
-    }
+  if (browser) {
     getAllDays()
       .then(() => (loading = false))
       .catch(() => goto("/"));
-  });
+  }
 </script>
 
 {#if loading}

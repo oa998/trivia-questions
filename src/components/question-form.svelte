@@ -20,6 +20,19 @@
   let error = "";
   const dispatcher = createEventDispatcher();
   let answer_correct_toggle = correct == null ? 2 : correct;
+
+  function readFile() {
+    if (!this.files || !this.files[0]) return;
+
+    const FR = new FileReader();
+
+    FR.addEventListener("load", function (evt) {
+      question = evt.target?.result;
+      console.log({ questionLength: question.length });
+    });
+
+    FR.readAsDataURL(this.files[0]);
+  }
 </script>
 
 <Modal
@@ -129,14 +142,21 @@
     </div>
 
     <div class="flex flex-col">
-      <textarea
-        bind:value={question}
-        disabled={submitting}
-        cols={6}
-        class="border-black border outline-none h-24 p-1 disabled:bg-slate-300 disabled:text-gray-500"
-        on:input={() => (error = "")}
-        autofocus
-      />
+      {#if question.length < 500}
+        <textarea
+          bind:value={question}
+          disabled={submitting}
+          cols={6}
+          class="border-black border outline-none h-24 p-1 disabled:bg-slate-300 disabled:text-gray-500"
+          on:input={() => (error = "")}
+          autofocus
+        />
+        <input id="inp" type="file" on:change={readFile} />
+      {:else}
+        <button on:click={() => (question = "")}>
+          <img id="img" class="w-full h-auto" src={question} alt="question" />
+        </button>
+      {/if}
       <span class="text-xs">Question</span>
     </div>
 
