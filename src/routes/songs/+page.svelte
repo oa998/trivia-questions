@@ -9,6 +9,7 @@
     </div>
     <a href={`${base}/songs/doughnuts`}>Doughnuts - <u>Sweet Sensation</u></a>
     <a href={`${base}/songs/uranus`}>Uranus - <u>Cosmic Game</u></a>
+    <a href={`${base}/songs/uno`}>UNO - <u>Wild Card Winner</u></a>
     <!-- <a href={`${base}/songs/pirate`}>Pirates - <u>Pirates of the Deep</u></a> -->
   </div>
 </div>

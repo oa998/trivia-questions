@@ -5,7 +5,9 @@
   import "../app.css";
 
   let loading = true;
-  if (browser) {
+  if (browser && location.pathname.startsWith("/songs")) {
+    loading = false;
+  } else if (browser) {
     getAllDays()
       .then(() => (loading = false))
       .catch(() => goto("/"));
